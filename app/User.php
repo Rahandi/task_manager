@@ -36,4 +36,35 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+
+    /**
+     * Many to One relationship
+     * 
+     * return task yang dikerjakan user
+     */
+    public function task(){
+        return $this->hasMany('App\Task');
+    }
+
+    /**
+     * Many to Many relationship
+     * 
+     * return tim yang mengandung user ini
+     */
+    public function team(){
+        return $this->belongsToMany('App\Team')->withPivot('level');
+    }
+
+    /**
+     * Fungsi yang mereturn level dari user
+     * 
+     * @param user_id,team_id
+     * 
+     * return integer
+     */
+
+     public function level($id,$team_id){
+          return $level = User::find($id)->team->find($team_id)->pivot->level;
+     }
 }
