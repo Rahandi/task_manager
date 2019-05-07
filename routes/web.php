@@ -16,5 +16,6 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::get('/Team/json', 'TeamController@json');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('/Team','TeamController');
