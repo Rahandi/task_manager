@@ -9,8 +9,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +17,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
 </head>
 <body>
     <div id="app">
@@ -49,6 +49,22 @@
                                 </li>
                             @endif
                         @else
+
+                            <!--Tab Team-->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Team">{{ __('My Teams') }}</a>
+                            </li>
+
+                            <!--Tab Project-->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Project">{{ __('My Projects') }}</a>
+                            </li>
+
+                            <!--Tab Task-->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Task">{{ __('My Task') }}</a>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -76,5 +92,17 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- jQuery -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- DataTables -->
+    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- App scripts -->
+    @stack('scripts')
+
+    <!-- Scripts
+    <script src="{{ asset('js/app.js') }}" defer></script>-->
 </body>
 </html>
