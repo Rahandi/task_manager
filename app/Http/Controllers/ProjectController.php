@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use Illuminate\Http\Request;
+use App\Project;
+use App\Task;
+use Auth;
+
 
 class ProjectController extends Controller
 {
@@ -10,10 +15,14 @@ class ProjectController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     */ 
     public function index()
     {
-         return view('Project.index');
+        // $tasks = Task::
+        $id = Auth::user()->id;
+        // $projects = Project::all() ;
+        $projects = Project::where('id_mgr', $id)->get();
+        return view('project.projects')->with('projects', $projects) ;
     }
 
     /**
@@ -23,7 +32,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        // $proje
+        return view('project.create') ;
     }
 
     /**
@@ -34,7 +44,28 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $projects_count = Project::count() ;
+        $id = Auth::user()->id;
+        
+        if ( $projects_count < 100  ) {  
+            
+            // dd( $request->all()  ) ;
+            $this->validate( $request, [
+                'project' => 'required'
+            ] ) ;        
+    
+            $project_new = new Project;
+            $project_new->project_name = $request->project;
+            $project_new->id_mgr = $id;
+            $project_new->save() ;
+            Session::flash('success', 'Project Created') ;
+            return redirect()->route('project.show') ;
+        }
+        
+        else {
+            Session::flash('info', 'Please delete some projects, Demo max: 100') ;
+            return redirect()->route('project.show') ;          
+        }
     }
 
     /**
@@ -56,7 +87,8 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        $edit_project =  Project::find($id) ;
+        return view('project.edit')->with('edit_project', $edit_project)  ;
     }
 
     /**
@@ -68,7 +100,11 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $update_project = Project::find($id) ;
+        $update_project->project_name = $request->name;
+        $update_project->save() ;
+        Session::flash('success', 'Project was sucessfully edited') ;
+        return redirect()->route('project.show') ;
     }
 
     /**
@@ -79,6 +115,20 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete_project = Project::find($id) ;
+        $delete_project->delete() ;
+        Session::flash('success', 'Project was deleted and tasks associated with it') ;
+        return redirect()->back();        
+        
     }
+
+    // does not work see  /app/Http/Controllers/Auth/LoginController.php
+    // public function logout () {
+    //     //logout user
+    //     auth()->logout();
+    //     // redirect to homepage or login
+    //     return redirect('/login');
+    // }
+
+
 }
